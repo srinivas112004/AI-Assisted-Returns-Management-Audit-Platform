@@ -1,0 +1,5 @@
+id,policy_code,name,category,return_window_days,restocking_fee_percent,requires_original_packaging,allow_opened_box,is_active,effective_from,effective_to,description
+1,POL-ELEC-14,Consumer Electronics Policy,Electronics,14,15.00,True,True,True,2025-10-22 12:00:00,None,14-day return window with 15% restocking fee for opened items. Serial numbers must match.
+2,POL-APPR-30,Apparel & Fashion Policy,Apparel,30,0.00,False,True,True,2025-10-22 12:00:00,None,30-day standard return window. Tags must be attached for full refund.
+3,POL-HOME-30,Home & Kitchen Appliance Policy,Home & Kitchen,30,10.00,True,True,True,2025-10-22 12:00:00,None,30-day window. 10% restocking fee on kitchen electrics if packaging opened.
+4,POL-NON-RET,Non-Returnable Perishables & Hygiene Policy,Food & Beverage,0,0.00,True,False,True,2025-10-22 12:00:00,None,Strictly non-returnable due to health and safety regulations.

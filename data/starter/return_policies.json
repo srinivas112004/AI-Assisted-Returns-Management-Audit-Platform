@@ -1,0 +1,58 @@
+[
+  {
+    "id":1,
+    "policy_code":"POL-ELEC-14",
+    "name":"Consumer Electronics Policy",
+    "category":"Electronics",
+    "return_window_days":14,
+    "restocking_fee_percent":"15.00",
+    "requires_original_packaging":true,
+    "allow_opened_box":true,
+    "is_active":true,
+    "effective_from":1761134400000,
+    "effective_to":"None",
+    "description":"14-day return window with 15% restocking fee for opened items. Serial numbers must match."
+  },
+  {
+    "id":2,
+    "policy_code":"POL-APPR-30",
+    "name":"Apparel & Fashion Policy",
+    "category":"Apparel",
+    "return_window_days":30,
+    "restocking_fee_percent":"0.00",
+    "requires_original_packaging":false,
+    "allow_opened_box":true,
+    "is_active":true,
+    "effective_from":1761134400000,
+    "effective_to":"None",
+    "description":"30-day standard return window. Tags must be attached for full refund."
+  },
+  {
+    "id":3,
+    "policy_code":"POL-HOME-30",
+    "name":"Home & Kitchen Appliance Policy",
+    "category":"Home & Kitchen",
+    "return_window_days":30,
+    "restocking_fee_percent":"10.00",
+    "requires_original_packaging":true,
+    "allow_opened_box":true,
+    "is_active":true,
+    "effective_from":1761134400000,
+    "effective_to":"None",
+    "description":"30-day window. 10% restocking fee on kitchen electrics if packaging opened."
+  },
+  {
+    "id":4,
+    "policy_code":"POL-NON-RET",
+    "name":"Non-Returnable Perishables & Hygiene Policy",
+    "category":"Food & Beverage",
+    "return_window_days":0,
+    "restocking_fee_percent":"0.00",
+    "requires_original_packaging":true,
+    "allow_opened_box":false,
+    "is_active":true,
+    "effective_from":1761134400000,
+    "effective_to":"None",
+    "description":"Strictly non-returnable due to health and safety regulations."
+  }
+]

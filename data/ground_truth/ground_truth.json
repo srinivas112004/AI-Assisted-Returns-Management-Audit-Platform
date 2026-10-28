@@ -1,0 +1,57 @@
+[
+  {
+    "anomaly_id": "ANOM-2026-000001",
+    "issue_type": "RETURN_QTY_EXCEEDS_PURCHASED",
+    "affected_entity": "ReturnLine",
+    "affected_business_id": "RMAL-TEST-ANOM-01",
+    "expected_detection_result": "FAIL",
+    "expected_business_decision": "REJECT",
+    "severity": "CRITICAL",
+    "rationale": "Customer requested return of 5 units on an order line where only 2 units were purchased.",
+    "injected_in_dataset": true
+  },
+  {
+    "anomaly_id": "ANOM-2026-000002",
+    "issue_type": "REFUND_EXCEEDS_PAID_AMOUNT",
+    "affected_entity": "Refund",
+    "affected_business_id": "REF-TEST-ANOM-02",
+    "expected_detection_result": "FAIL",
+    "expected_business_decision": "REJECT",
+    "severity": "CRITICAL",
+    "rationale": "Refund attempted for $350.00 when the net paid order line amount was only $199.99.",
+    "injected_in_dataset": true
+  },
+  {
+    "anomaly_id": "ANOM-2026-000003",
+    "issue_type": "RESTOCK_BEFORE_INSPECTION",
+    "affected_entity": "InventoryDisposition",
+    "affected_business_id": "DISP-TEST-ANOM-03",
+    "expected_detection_result": "FAIL",
+    "expected_business_decision": "REJECT",
+    "severity": "HIGH",
+    "rationale": "Inventory disposition executed as RESTOCK while shipment was still in transit with no completed inspection.",
+    "injected_in_dataset": true
+  },
+  {
+    "anomaly_id": "ANOM-2026-000004",
+    "issue_type": "RETURN_AFTER_WINDOW_WITHOUT_OVERRIDE",
+    "affected_entity": "ReturnLine",
+    "affected_business_id": "RMAL-TEST-ANOM-04",
+    "expected_detection_result": "FAIL",
+    "expected_business_decision": "REJECT",
+    "severity": "MEDIUM",
+    "rationale": "Return request submitted 52 days after delivery (exceeding 14-day electronics policy window) marked approved without authorized override.",
+    "injected_in_dataset": true
+  },
+  {
+    "anomaly_id": "ANOM-2026-000005",
+    "issue_type": "DUPLICATE_REFUND_ATTEMPT",
+    "affected_entity": "RefundAttempt",
+    "affected_business_id": "REF-ATT-TEST-ANOM-05",
+    "expected_detection_result": "FAIL",
+    "expected_business_decision": "BLOCK",
+    "severity": "CRITICAL",
+    "rationale": "Second payout request executed using previously consumed idempotency key 'IDEMP-REF-TEST-000001'.",
+    "injected_in_dataset": true
+  }
+]

@@ -1,0 +1,16 @@
+id,sku,name,category,price,cost,is_returnable,default_return_window_days,restockable,requires_serial_number,created_at
+1,SKU-ELEC-001,Aura Ultra Wireless Headphones,Electronics,199.99,85.00,True,14,True,True,2026-04-25 12:00:00
+2,SKU-ELEC-002,Vortex 4K Action Camera,Electronics,249.50,110.00,True,14,True,True,2026-04-25 12:00:00
+3,SKU-ELEC-003,PulseFit Pro Smartwatch,Electronics,149.00,60.00,True,14,True,True,2026-04-25 12:00:00
+4,SKU-ELEC-004,SonicBeam Soundbar 2.1,Electronics,129.99,52.00,True,14,True,True,2026-04-25 12:00:00
+5,SKU-ELEC-005,Zenith Mechanical Keyboard,Electronics,89.95,35.00,True,14,True,True,2026-04-25 12:00:00
+6,SKU-APPR-001,Apex Merino Wool Sweater,Apparel,78.00,24.00,True,30,True,False,2026-04-25 12:00:00
+7,SKU-APPR-002,Strata Technical Trench Coat,Apparel,185.00,65.00,True,30,True,False,2026-04-25 12:00:00
+8,SKU-APPR-003,FlexForm Stretch Chinos,Apparel,54.50,18.00,True,30,True,False,2026-04-25 12:00:00
+9,SKU-APPR-004,AeroRun Lightweight Running Shoes,Apparel,110.00,42.00,True,30,True,False,2026-04-25 12:00:00
+10,SKU-HOME-001,Barista Touch Espresso Machine,Home & Kitchen,349.99,160.00,True,30,True,False,2026-04-25 12:00:00
+11,SKU-HOME-002,Cast Iron Dutch Oven 6-Qt,Home & Kitchen,95.00,38.00,True,30,True,False,2026-04-25 12:00:00
+12,SKU-HOME-003,Smart Pure HEPA Air Purifier,Home & Kitchen,139.00,58.00,True,30,True,False,2026-04-25 12:00:00
+13,SKU-FOOD-001,Artisan Dark Roast Coffee Beans 2lb,Food & Beverage,28.00,10.00,False,0,False,False,2026-04-25 12:00:00
+14,SKU-FOOD-002,Organic Ceremonial Grade Matcha,Food & Beverage,36.00,14.00,False,0,False,False,2026-04-25 12:00:00
+15,SKU-HYGN-001,Precision Electric Sonic Toothbrush Head 4-Pack,Personal Care,24.99,8.00,False,0,False,False,2026-04-25 12:00:00

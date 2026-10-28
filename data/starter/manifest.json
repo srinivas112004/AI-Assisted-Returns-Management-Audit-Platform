@@ -1,0 +1,25 @@
+{
+  "profile": "starter",
+  "seed": 20261022,
+  "generated_at": "2026-10-22T12:00:00+00:00",
+  "disclaimer": "This synthetic dataset is generated deterministically for testing and code challenge validation. It contains NO personal, confidential, or real customer source data.",
+  "row_counts": {
+    "customers": 150,
+    "products": 15,
+    "return_policies": 4,
+    "orders": 300,
+    "order_lines": 538,
+    "return_requests": 60,
+    "return_lines": 68,
+    "return_authorizations": 43,
+    "return_shipments": 43,
+    "inspections": 46,
+    "refunds": 46,
+    "refund_attempts": 46,
+    "inventory_dispositions": 46,
+    "inventory_movements": 46,
+    "return_events": 60,
+    "anomaly_records": 5
+  },
+  "ground_truth_anomalies_count": 5
+}

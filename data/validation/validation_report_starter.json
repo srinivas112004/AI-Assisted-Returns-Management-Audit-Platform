@@ -1,0 +1,74 @@
+{
+  "overall_status": "PASS",
+  "total_checks": 9,
+  "passed_checks": 9,
+  "failed_checks": 0,
+  "warning_checks": 0,
+  "total_violations": 0,
+  "timestamp": "2026-10-28T10:04:50.274572+00:00",
+  "checks": [
+    {
+      "check_name": "PK_UNIQUENESS_RMA",
+      "status": "PASS",
+      "description": "All ReturnRequest RMA numbers are unique.",
+      "violations_count": 0,
+      "sample_violations": []
+    },
+    {
+      "check_name": "FK_ORDER_CUSTOMER",
+      "status": "PASS",
+      "description": "All orders reference valid customer IDs.",
+      "violations_count": 0,
+      "sample_violations": []
+    },
+    {
+      "check_name": "FK_RMA_ORDER",
+      "status": "PASS",
+      "description": "All ReturnRequests reference valid order IDs.",
+      "violations_count": 0,
+      "sample_violations": []
+    },
+    {
+      "check_name": "DATE_ORDERING_LIFECYCLE",
+      "status": "PASS",
+      "description": "All RMA requested dates are on or after order delivery.",
+      "violations_count": 0,
+      "sample_violations": []
+    },
+    {
+      "check_name": "QUANTITY_BOUNDS_CHECK",
+      "status": "PASS",
+      "description": "No return lines exceed purchased quantity.",
+      "violations_count": 0,
+      "sample_violations": []
+    },
+    {
+      "check_name": "REFUND_ARITHMETIC_LIMIT",
+      "status": "PASS",
+      "description": "All refunds are within allowable paid purchase amounts.",
+      "violations_count": 0,
+      "sample_violations": []
+    },
+    {
+      "check_name": "DUPLICATE_REFUND_IDEMPOTENCY",
+      "status": "PASS",
+      "description": "No duplicate refund payments exist with identical idempotency keys.",
+      "violations_count": 0,
+      "sample_violations": []
+    },
+    {
+      "check_name": "RESTOCK_BEFORE_INSPECTION_CHECK",
+      "status": "PASS",
+      "description": "All RESTOCK dispositions have completed passing inspections.",
+      "violations_count": 0,
+      "sample_violations": []
+    },
+    {
+      "check_name": "POLICY_WINDOW_COMPLIANCE",
+      "status": "PASS",
+      "description": "No late returns were approved without explicit authorized override.",
+      "violations_count": 0,
+      "sample_violations": []
+    }
+  ]
+}

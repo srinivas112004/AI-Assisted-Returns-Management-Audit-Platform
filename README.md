@@ -1,0 +1,343 @@
+# AI-Assisted Returns Management & Reverse Logistics Audit Platform
+
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.111.0-009688.svg?style=flat&logo=fastapi)](https://fastapi.tiangolo.com)
+[![SQLAlchemy](https://img.shields.io/badge/SQLAlchemy-2.0.30-d71f00.svg?style=flat)](https://www.sqlalchemy.org/)
+[![React](https://img.shields.io/badge/React-19.3.1-61dafb.svg?style=flat&logo=react)](https://react.dev)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178c6.svg?style=flat&logo=typescript)](https://www.typescriptlang.org/)
+[![TailwindCSS](https://img.shields.io/badge/TailwindCSS-v4-38b2ac.svg?style=flat&logo=tailwind-css)](https://tailwindcss.com/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Tests: 100% Passed](https://img.shields.io/badge/Tests-12%2F12%20Passed-brightgreen.svg)](#8-automated-testing)
+[![Invariants: 100% Validated](https://img.shields.io/badge/Invariants-100%25%20PASS-brightgreen.svg)](#7-data-validation-engine)
+
+---
+
+## 1. Project Overview & Business Problem
+
+Retailers and ecommerce enterprises face massive margin degradation and audit risks due to fragmented reverse logistics:
+- **Policy Slippage**: Items returned outside category return windows or from excluded non-returnable categories without authorized oversight.
+- **Duplicate Payouts & Overlimit Refunds**: Retried API calls or race conditions issuing duplicate refund payments or refunding more than the customer actually paid.
+- **Premature Inventory Re-shelving**: Damaged, counterfeit, or uninspected products mistakenly placed back on available stock shelves.
+- **Untracked Exception Overrides**: Ad-hoc customer courtesy exceptions granted without an auditable rationale or supervisor identity.
+
+### The Solution
+This platform delivers a complete, production-grade reverse logistics management and audit system:
+1. **Deterministic Business Rules Engine**: Validates order ownership, delivery dates, category return windows, and quantity bounds before RMA issuance.
+2. **Deterministic Authorizations**: Enforces single-token authorizations (`RMA-AUTH-2026-XXXXXX`) and updates line reservations.
+3. **Warehouse Dock & Inspection Pipeline**: Requires dock parcel receipt (`DELIVERED`) before enabling physical inspection, recommending disposition based on item/packaging conditions.
+4. **Idempotent Refund Guard**: Enforces fixed-point `Decimal` arithmetic, proportional discount and tax allocation, and blocks repeated payouts via cryptographic idempotency keys.
+5. **Physical Disposition Ledger**: Routes physical items into `RESTOCK`, `REFURBISH`, `QUARANTINE`, or `SCRAP`, recording immutable inventory ledger movements.
+6. **Append-Only Audit Trail**: Records every state transition, actor, and rationale in `return_events`.
+7. **Synthetic Data Engine & Ground-Truth Validator**: Deterministic, seed-locked dataset generator (`seed=20261022`) generating clean baselines and separate ground-truth anomaly challenge fixtures.
+
+---
+
+## 2. Architecture & Data Model
+
+### Architecture Diagram
+```
+┌────────────────────────────────────────────────────────┐
+│                   React 19 Frontend                    │
+│   (14 Operational & Audit Views, Light Theme, Recharts)│
+└───────────────────────────┬────────────────────────────┘
+                            │ REST JSON / Proxy
+┌───────────────────────────▼────────────────────────────┐
+│                    FastAPI Backend                     │
+│  ├── Rules Engine (Eligibility, Inspection, Refund)    │
+│  ├── Domain Services (Returns, Logistics, Payouts)     │
+│  ├── Invariant Validation Suite                        │
+│  └── Synthetic Data Generator (Seed: 20261022)         │
+└───────────────────────────┬────────────────────────────┘
+                            │ SQLAlchemy 2.0 (Decimal Fixed-Point)
+┌───────────────────────────▼────────────────────────────┐
+│          Database Layer (SQLite / MySQL 8.0)           │
+│  ├── Core Entities (Customer, Order, RMA, Lines, etc.) │
+│  ├── Financials (Refunds, Idempotency Guard Attempts)  │
+│  ├── Physical Movements (Dispositions, Movements)      │
+│  └── Audit Trail (Append-Only Return Events)           │
+└────────────────────────────────────────────────────────┘
+```
+
+### Core Entities & Format Standards
+All public business identifiers are deterministic, stable, and zero-padded:
+- **Order**: `ORD-2026-000001`
+- **ReturnRequest (RMA)**: `RMA-2026-000001`
+- **ReturnLine**: `RMAL-RMA-2026-000001-01`
+- **ReturnAuthorization**: `RMA-AUTH-2026-000001`
+- **ReturnShipment**: `RTS-2026-000001`
+- **Inspection**: `INS-2026-000001`
+- **Refund**: `REF-2026-000001`
+- **InventoryDisposition**: `DISP-2026-000001`
+- **InventoryMovement**: `MOV-2026-000001`
+- **ReturnEvent**: `EVT-2026-000001`
+- **AnomalyRecord**: `ANOM-2026-000001`
+
+Detailed ER diagram is documented in [`docs/erd.md`](docs/erd.md).
+
+---
+
+## 3. Synthetic Data Disclaimer & Ground-Truth Separation
+
+> **DISCLAIMER:**  
+> All records generated by this platform are **100% synthetic**. No real customer information, personal identifiable information (PII), or proprietary datasets were used.
+
+### Ground-Truth Separation
+In accordance with challenge guidelines, invalid test fixtures are **strictly segregated** from clean operational baseline datasets:
+- **Clean Baseline Dataset**: `data/starter/` (or `data/exports/`) containing fully compliant orders, RMAs, shipments, and dispositions. Passes all 9 hard-invariant validation checks.
+- **Ground-Truth Anomaly Dataset**: Stored separately in `data/ground_truth/ground_truth.csv` and `data/ground_truth/ground_truth.json`.
+- **Negative Scenarios Covered**:
+  1. `RETURN_QTY_EXCEEDS_PURCHASED`
+  2. `REFUND_EXCEEDS_PAID_AMOUNT`
+  3. `RESTOCK_BEFORE_INSPECTION`
+  4. `RETURN_AFTER_WINDOW_WITHOUT_OVERRIDE`
+  5. `DUPLICATE_REFUND_ATTEMPT`
+
+---
+
+## 4. Quickstart: Local Setup & Startup
+
+### Prerequisites
+- Python 3.12+
+- Node.js 20+ and npm 10+
+- Git
+
+### Step 1: Clone and Configure Environment
+```bash
+git clone <YOUR_REPO_URL>
+cd "Return Management System"
+
+# Copy environment variables
+cp .env.example .env
+```
+
+### Step 2: Backend Setup
+```bash
+# Create and activate Python virtual environment
+python -m venv backend/venv
+
+# Windows PowerShell:
+.\backend\venv\Scripts\Activate.ps1
+# macOS/Linux:
+# source backend/venv/bin/activate
+
+# Install dependencies
+pip install -r backend/requirements.txt
+
+# Run database migrations
+cd backend
+alembic upgrade head
+cd ..
+```
+
+### Step 3: Generate Seeded Starter Data
+```bash
+cd backend
+python -m app.generator.generate --profile starter --seed 20261022
+cd ..
+```
+
+### Step 4: Start Backend Server
+```bash
+cd backend
+uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+```
+API Documentation will be live at: **[http://localhost:8000/docs](http://localhost:8000/docs)**
+
+### Step 5: Start Frontend Application
+In a separate terminal:
+```bash
+cd frontend
+npm install
+npm run dev
+```
+Open your browser at: **[http://localhost:5173](http://localhost:5173)**
+
+---
+
+## 5. Docker Compose Startup (Zero-Config Containerization)
+
+To launch the complete multi-tier production stack (MySQL 8.0 + FastAPI Backend + React Nginx Frontend):
+```bash
+docker compose up --build
+```
+- **Frontend UI**: [http://localhost:3000](http://localhost:3000)
+- **FastAPI OpenAPI Swagger**: [http://localhost:8000/docs](http://localhost:8000/docs)
+- **MySQL Database**: `localhost:3306` (Database: `returns_management_db`)
+
+---
+
+## 6. Dataset Generation Commands
+
+The platform features a deterministic, profile-based synthetic generator:
+
+### Starter Profile (Fast local development & verification)
+```bash
+cd backend
+python -m app.generator.generate --profile starter --seed 20261022
+```
+*Generates 150 customers, 300 orders, 538 order lines, 60 RMAs, 68 return lines, 43 shipments, 46 inspections, 46 refunds, 46 dispositions, and exports clean CSV/JSON to `data/starter/`.*
+
+### Full Profile (30,000 Orders Benchmark)
+```bash
+cd backend
+python -m app.generator.generate --profile full --seed 20261022
+```
+*Generates 5,000 customers, 30,000 orders, 5,000 return requests, and 8,000 return lines, fully persisting and exporting to `data/exports/`.*
+
+---
+
+## 7. Data Validation Engine
+
+Run the platform invariant validation engine to check hard constraints (foreign keys, quantity bounds, date sequences, duplicate refunds, restock-before-inspection):
+
+```bash
+cd backend
+python -m app.generator.validate --profile starter
+```
+
+Output:
+```
+============================================================
+VALIDATION REPORT: PASS
+Passed Checks: 9 / 9
+Violations: 0
+Report saved to: data/validation/validation_report_starter.json
+============================================================
+ [PASS] PK_UNIQUENESS_RMA: PASS - All ReturnRequest RMA numbers are unique.
+ [PASS] FK_ORDER_CUSTOMER: PASS - All orders reference valid customer IDs.
+ [PASS] FK_RMA_ORDER: PASS - All ReturnRequests reference valid order IDs.
+ [PASS] DATE_ORDERING_LIFECYCLE: PASS - All RMA requested dates are on or after order delivery.
+ [PASS] QUANTITY_BOUNDS_CHECK: PASS - No return lines exceed purchased quantity.
+ [PASS] REFUND_ARITHMETIC_LIMIT: PASS - All refunds are within allowable paid purchase amounts.
+ [PASS] DUPLICATE_REFUND_IDEMPOTENCY: PASS - No duplicate refund payments exist with identical idempotency keys.
+ [PASS] RESTOCK_BEFORE_INSPECTION_CHECK: PASS - All RESTOCK dispositions have completed passing inspections.
+ [PASS] POLICY_WINDOW_COMPLIANCE: PASS - No late returns were approved without explicit authorized override.
+```
+
+---
+
+## 8. Automated Testing
+
+Run the automated pytest suite:
+```bash
+cd backend
+pytest -v
+```
+
+### Actual Test Run Results:
+```
+tests/test_api_endpoints.py::test_health_check PASSED                    [  8%]
+tests/test_api_endpoints.py::test_end_to_end_return_api_workflow PASSED  [ 16%]
+tests/test_business_rules.py::test_eligible_return PASSED                [ 25%]
+tests/test_business_rules.py::test_ineligible_return_category_exclusion PASSED [ 33%]
+tests/test_business_rules.py::test_late_return_without_override PASSED   [ 41%]
+tests/test_business_rules.py::test_late_return_with_authorized_override PASSED [ 50%]
+tests/test_business_rules.py::test_quantity_exceeding_purchased PASSED   [ 58%]
+tests/test_business_rules.py::test_partial_return_and_remaining_limit PASSED [ 66%]
+tests/test_business_rules.py::test_refund_arithmetic_precision PASSED    [ 75%]
+tests/test_business_rules.py::test_refund_exceeding_paid_amount_rejection PASSED [ 83%]
+tests/test_business_rules.py::test_inspection_outcomes PASSED            [ 91%]
+tests/test_business_rules.py::test_disposition_invariants PASSED         [100%]
+
+======================= 12 passed in 4.45s =======================
+```
+
+---
+
+## 9. Reproducibility Acceptance Test
+
+Verify deterministic reproducibility by running the verification script, which executes the generator twice from scratch and compares SHA-256 hashes of all exported CSV and JSON files:
+
+```bash
+python scripts/verify_reproducibility.py
+```
+
+Result:
+```
+Comparing SHA-256 checksums across runs:
+ [MATCH] customers.csv: 4829d6f5d677640b... == 4829d6f5d677640b...
+ [MATCH] customers.json: e5ebc5e4df9a7d60... == e5ebc5e4df9a7d60...
+ [MATCH] inspections.csv: 650db44393beba3f... == 650db44393beba3f...
+ [MATCH] inspections.json: 6106ef4b406da6e0... == 6106ef4b406da6e0...
+ [MATCH] inventory_dispositions.csv: 8b06cfa2c595632c... == 8b06cfa2c595632c...
+ [MATCH] inventory_dispositions.json: 76af2999d1f105ab... == 76af2999d1f105ab...
+ [MATCH] inventory_movements.csv: 943dc3fdf239e64e... == 943dc3fdf239e64e...
+ [MATCH] inventory_movements.json: e2985622882e8783... == e2985622882e8783...
+ [MATCH] manifest.json: 6a058438e2dd9dbc... == 6a058438e2dd9dbc...
+ [MATCH] order_lines.csv: 8d48a85c90c860cc... == 8d48a85c90c860cc...
+ [MATCH] order_lines.json: 27aba4f4f866c899... == 27aba4f4f866c899...
+ [MATCH] orders.csv: b3c75c017f4fa75c... == b3c75c017f4fa75c...
+ [MATCH] orders.json: 7feb17801e0ef8d7... == 7feb17801e0ef8d7...
+ [MATCH] products.csv: 0bd61b8383254abd... == 0bd61b8383254abd...
+ [MATCH] products.json: a5cf31bbc8e476b8... == a5cf31bbc8e476b8...
+ [MATCH] refund_attempts.csv: b7d548739052737b... == b7d548739052737b...
+ [MATCH] refund_attempts.json: 7f99145a72cfc23d... == 7f99145a72cfc23d...
+ [MATCH] refunds.csv: cdbe0b82f54885fc... == cdbe0b82f54885fc...
+ [MATCH] refunds.json: 3675023c34f1ea11... == 3675023c34f1ea11...
+ [MATCH] return_authorizations.csv: 1cedffe0b5c712f3... == 1cedffe0b5c712f3...
+ [MATCH] return_authorizations.json: 788a580ac402864f... == 788a580ac402864f...
+ [MATCH] return_events.csv: ae02e8850d1b1af1... == ae02e8850d1b1af1...
+ [MATCH] return_events.json: e2f738e3a9a42f87... == e2f738e3a9a42f87...
+ [MATCH] return_lines.csv: 9d89a049af24362a... == 9d89a049af24362a...
+ [MATCH] return_lines.json: 34b4d6b93bf8bdea... == 34b4d6b93bf8bdea...
+ [MATCH] return_policies.csv: d95eeb683e2dd166... == d95eeb683e2dd166...
+ [MATCH] return_policies.json: 4c0bfe34add04d0e... == 4c0bfe34add04d0e...
+ [MATCH] return_requests.csv: 0e559bd411a2e60f... == 0e559bd411a2e60f...
+ [MATCH] return_requests.json: e541f973a3388345... == e541f973a3388345...
+ [MATCH] return_shipments.csv: c4758eb422aa05f0... == c4758eb422aa05f0...
+ [MATCH] return_shipments.json: 3355a5ab845ba093... == 3355a5ab845ba093...
+
+[SUCCESS] Deterministic reproducibility verified: 100% identical outputs and hashes!
+```
+
+---
+
+## 10. Frontend Walkthrough & 14 Dedicated Pages
+
+The frontend is implemented in a crisp, clean light theme with white surfaces, clear typography, and restrained blue accents:
+
+1. **Overview Dashboard** (`/`): Real-time KPI cards for orders, return rate, eligible/rejected ratio, pending inspections, refund totals, blocked duplicates, and disposition breakdown.
+2. **Orders Explorer** (`/orders`): Search orders, view items, unit prices, discounts, taxes, and track remaining units available to return.
+3. **Returns Queue** (`/returns`): Interactive RMA queue with modal to create and evaluate new returns.
+4. **Return Details & Lifecycle Timeline** (`/returns/:rmaNumber`): Visual 7-step pipeline tracking RMA from submission through evaluation, authorization, reverse shipping, dock QA, inventory disposition, and idempotent payout.
+5. **Eligibility & Authorization** (`/eligibility`): Focused manager queue for issuing authorizations or approving supervisor policy overrides.
+6. **Warehouse Shipments** (`/shipments`): Carrier logistics tracker with dock intake scanning.
+7. **Inspection Workspace** (`/inspections`): QA bay tagging item condition, packaging condition, and damage types.
+8. **Refund Management** (`/refunds`): Settled payouts breakdown and duplicate attempt security log.
+9. **Inventory Disposition** (`/dispositions`): Routing into RESTOCK, REFURBISH, QUARANTINE, SCRAP, and auditable movement ledger.
+10. **Exceptions & Anomaly Monitor** (`/exceptions`): Monitored ground-truth challenge fixtures, override history, and rejected returns.
+11. **Analytics & Evaluation** (`/analytics`): Precision, Recall, F1 score, reason breakdown, and category charts.
+12. **Data Generator** (`/generator`): Run synthetic generator with profile & seed, view manifest row counts, and download CSV/JSON files.
+13. **Validation Reports** (`/validation`): Live invariant checklist status and violation reports.
+14. **Data Dictionary & Docs** (`/documentation`): Searchable data dictionary for all entities, formula documentation, and architectural guides.
+
+---
+
+## 11. Known Limitations & Production Enhancements
+
+1. **Simulated Payment Gateway**: The platform simulates gateway tokenization and captures. In production, integrate Stripe, Adyen, or PayPal webhooks while maintaining the current database idempotency table.
+2. **Carrier Webhooks**: Shipments currently transition through manual dock scans or automated simulation. For live enterprise deployments, connect EasyPost or FedEx Tracking Webhooks.
+3. **Database Scaling**: SQLite provides zero-configuration local execution and testing. For multi-million row production deployments, use the provided MySQL 8.0 Docker configuration with connection pooling.
+
+---
+
+## 12. Git Commands for GitHub Submission
+
+To push this repository to GitHub:
+
+```bash
+# 1. Initialize git repository if not already initialized
+git init
+
+# 2. Add all tracked files
+git add .
+
+# 3. Commit with production-ready message
+git commit -m "feat: complete AI-assisted returns management and audit platform"
+
+# 4. Create main branch and link to remote repository
+git branch -M main
+git remote add origin https://github.com/<YOUR_GITHUB_USERNAME>/<YOUR_REPOSITORY_NAME>.git
+
+# 5. Push to GitHub
+git push -u origin main
+```
