@@ -76,3 +76,4 @@ def export_entity_json(entity: str, db: Session = Depends(get_db)):
         headers={"Content-Disposition": f"attachment; filename={entity}.json"}
     )
     return response
+

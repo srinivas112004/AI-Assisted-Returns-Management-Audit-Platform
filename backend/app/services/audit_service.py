@@ -36,3 +36,4 @@ def log_event(
     db.commit()
     db.refresh(evt)
     return evt
+

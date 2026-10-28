@@ -88,3 +88,4 @@ def record_inspection(
     )
 
     return inspection
+

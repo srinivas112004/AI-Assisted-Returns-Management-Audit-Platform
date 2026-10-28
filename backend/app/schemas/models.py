@@ -244,3 +244,4 @@ class LineOverrideRequest(BaseModel):
 class DataGenerationRequest(BaseModel):
     profile: str = "starter" # starter or full
     seed: int = 20261022
+

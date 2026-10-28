@@ -159,3 +159,4 @@ export const InspectionPage: React.FC = () => {
     </div>
   );
 };
+

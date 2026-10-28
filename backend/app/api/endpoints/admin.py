@@ -23,3 +23,4 @@ def trigger_data_generation(
         "message": f"Successfully generated dataset with profile '{req.profile}' and seed {req.seed}.",
         "summary": res
     }
+

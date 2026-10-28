@@ -47,3 +47,4 @@ Thumbs.db
 
 # Data generation temp/cache
 data/exports/*.tmp
+

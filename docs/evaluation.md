@@ -87,3 +87,4 @@ In enterprise financial and reverse logistics platforms, deterministic invariant
 - **Explainability**: Rejections provide exact, actionable rule failure codes (e.g. `RETURN_QTY_EXCEEDS_AVAILABLE (Requested: 5, Available: 2)`), satisfying compliance and auditability requirements.
 - **Zero Hallucination**: Financial payouts cannot risk probabilistic variance or drifting threshold boundaries.
 - **Deterministic Reproducibility**: Given identical input states, the rules engine produces identical verdicts across runs.
+

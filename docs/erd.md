@@ -196,3 +196,4 @@ erDiagram
 8. **ReturnLine 1:N Refund**: Supports multiple refund installments or single complete payout.
 9. **ReturnLine 0:N InventoryDisposition**: Supports split dispositions when inspected units have different physical conditions (e.g., 1 unit restocked, 1 unit scrapped).
 10. **InventoryDisposition 1:N InventoryMovement**: Every inventory disposition generates auditable physical stock ledger movements.
+

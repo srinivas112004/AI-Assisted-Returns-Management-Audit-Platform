@@ -344,3 +344,4 @@ export interface EvaluationMetrics {
   inventory_disposition_compliance_rate: number;
   referential_integrity_pass_rate: number;
 }
+

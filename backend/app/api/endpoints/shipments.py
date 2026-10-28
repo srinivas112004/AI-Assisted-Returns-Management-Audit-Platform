@@ -108,3 +108,4 @@ def inspect_shipment_endpoint(shipment_id: str, req: InspectShipmentRequest, db:
         "result": insp.result,
         "recommended_disposition": insp.recommended_disposition
     }
+

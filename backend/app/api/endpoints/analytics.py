@@ -51,3 +51,4 @@ def get_anomaly_analytics(db: Session = Depends(get_db)):
         "false_positives": metrics["false_positives"],
         "detection_rate_by_issue_type": metrics["detection_rate_by_issue_type"]
     }
+

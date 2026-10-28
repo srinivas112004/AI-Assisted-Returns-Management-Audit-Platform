@@ -118,3 +118,4 @@ Supported destinations:
 2. **Never Exceed Approved Quantity**: Total disposed quantity across all dispositions for a return line cannot exceed `approved_quantity`.
 3. **Auditable Movement**: Every completed disposition writes an immutable record to `inventory_movements` with `movement_id`, `from_location`, `to_location`, and timestamp.
 4. **Split Dispositions**: Return lines with multiple units can be split into different dispositions (e.g. 1 unit `RESTOCK`, 1 unit `REFURBISH`), in which case the line status is marked `SPLIT`.
+

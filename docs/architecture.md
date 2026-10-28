@@ -120,3 +120,4 @@ stateDiagram-v2
 3. **Physical Intake Invariant**: Physical items cannot be routed to `RESTOCK` before confirmed receipt (`DELIVERED`) and passing inspection (`PASS` or `PASS_WITH_RESTOCKING_FEE`).
 4. **Append-Only Audit Trail**: State transitions, supervisor overrides, and logistics events are logged in an append-only `return_events` table that cannot be silently modified.
 5. **Admin Header Protection**: Administrative operations (such as batch data generation) require `X-Admin-Key` header authentication.
+

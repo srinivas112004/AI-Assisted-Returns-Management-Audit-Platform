@@ -215,3 +215,4 @@ def get_data_dictionary():
         "total_entities": len(DATA_DICTIONARY_ENTITIES),
         "entities": DATA_DICTIONARY_ENTITIES
     }
+

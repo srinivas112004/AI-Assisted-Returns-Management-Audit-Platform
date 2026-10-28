@@ -89,3 +89,4 @@ def list_exceptions(
         "anomalies": anomalies_data,
         "rejected_returns": rejected_data
     }
+

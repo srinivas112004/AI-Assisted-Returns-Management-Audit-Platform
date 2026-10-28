@@ -83,3 +83,4 @@ def list_refund_attempts(
         "page_size": page_size,
         "total_pages": (total + page_size - 1) // page_size if total > 0 else 1
     }
+

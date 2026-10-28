@@ -79,3 +79,4 @@ def get_dashboard_summary(db: Session = Depends(get_db)):
         "disposition_breakdown": disp_breakdown,
         "recent_returns": recent_rmas,
     }
+

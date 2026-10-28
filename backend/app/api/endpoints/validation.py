@@ -10,3 +10,4 @@ router = APIRouter()
 def get_validation_report(db: Session = Depends(get_db)):
     report = run_validation_suite(db)
     return report
+

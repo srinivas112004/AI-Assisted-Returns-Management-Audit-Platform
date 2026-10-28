@@ -318,3 +318,4 @@ Ground-truth labelled anomalies for detector evaluation.
 | `rationale` | TEXT | - | No | None | Technical scenario description |
 | `injected_in_dataset` | BOOLEAN | - | No | True | Ground truth flag |
 | `detected` | BOOLEAN | - | No | True | Detection status flag |
+

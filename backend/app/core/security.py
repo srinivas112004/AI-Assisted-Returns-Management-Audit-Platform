@@ -8,3 +8,4 @@ def verify_admin_key(x_admin_key: str = Header(None, alias="X-Admin-Key")):
             detail="Forbidden: Invalid or missing administrator credentials (X-Admin-Key)."
         )
     return True
+

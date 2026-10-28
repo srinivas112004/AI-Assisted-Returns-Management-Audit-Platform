@@ -234,3 +234,4 @@ export const GeneratorPage: React.FC = () => {
     </div>
   );
 };
+

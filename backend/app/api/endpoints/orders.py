@@ -121,3 +121,4 @@ def get_order_details(order_id: str, db: Session = Depends(get_db)):
             for r in order.return_requests
         ]
     }
+

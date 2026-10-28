@@ -45,3 +45,4 @@ def evaluate_inspection_outcome(
 
     # Default safe fallback: Quarantine for manual evaluation
     return "QUARANTINE_REQUIRED", "QUARANTINE", False
+

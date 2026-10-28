@@ -139,3 +139,4 @@ def evaluate_platform_metrics(db: Session) -> Dict[str, Any]:
         "referential_integrity_pass_rate": ref_pass,
         "validation_report": validation_report
     }
+
